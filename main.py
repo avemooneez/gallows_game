@@ -9,7 +9,9 @@ def gallows_start():
     word = dictionary[random.randint(0,(len(dictionary)-1))] # Выбор слова
     word_arr = list(word)
     guess = list("_"*len(word))
-    attempt_counter = 5 # Счетчик попыток
+    attempt_counter = 5
+    if len(word)>=7:
+        attempt_counter = 10# Счетчик попыток
     print("_"*len(word), "|", len(word), "букв\n")
     while guess!=word_arr:
         print ("Осталось попыток: ", attempt_counter, "\n")
