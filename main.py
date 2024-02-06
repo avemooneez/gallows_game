@@ -2,50 +2,69 @@ from dict import *
 import random
 import os
 
-clear = lambda: os.system('cls') # Очищение консоли
-def gallows_start():
+clear = lambda: os.system('cls') 
+
+def get_random_word():
+    return random.choice(dictionary)
+
+def check_inputed_letter(word_arr, inputed_letter):
+    return [i for i, ltr in enumerate(word_arr) if ltr == inputed_letter]
+
+def check_char(inputed_letter):
+    return inputed_letter.isalpha() and len(inputed_letter) == 1 and not inputed_letter.isdigit()
+
+def play_again():
+    ask = input("Хотите ли вы начать игру вновь? [да/нет]:").lower()
+    
+    return ask == "да"
+
+def gallows_loop():
     clear()
-    print("Привет! Это игра под названием виселица")
-    word = dictionary[random.randint(0,(len(dictionary)-1))] # Выбор слова
+    word = get_random_word()
     word_arr = list(word)
     guess = list("_"*len(word))
-    attempt_counter = 5
+    
+    attempt_counter = 0
     if len(word)>=7:
-        attempt_counter = 10# Счетчик попыток
-    print("_"*len(word), "|", len(word), "букв\n")
+        attempt_counter = 10
+    else:
+        attempt_counter = 5
+    print("".join(guess), "|", len(word), "букв\n")
+    
     while guess!=word_arr:
         print ("Осталось попыток: ", attempt_counter, "\n")
         inputed_letter=(input("Введите букву - ")).lower()
-        # Проверка на наличие буквы в загаданном слове
-        if inputed_letter in word_arr:
-            clear()
-            x = [i for i, ltr in enumerate(word_arr) if ltr == inputed_letter] # Нахождение всех повторяющихся букв
-            for j in x: # Вставка в guess
-                guess[j] = inputed_letter
-            print("".join(guess)) # Вывод
+        if check_char(inputed_letter):
+            if inputed_letter in word_arr:
+                clear()
+                x = check_inputed_letter(word_arr, inputed_letter)
+                
+                for j in x: 
+                    guess[j] = inputed_letter
+                print("".join(guess))
+            else:
+                clear()
+                print("".join(guess))
+                attempt_counter-=1
+                print ("Не угадал")
+                if attempt_counter < 5: print ("  | ")
+                if attempt_counter < 4: print ("  O ")
+                if attempt_counter < 3: print (" /|\ ")
+                if attempt_counter < 2: print ("  | ")
+                if attempt_counter < 1: print (" / \ ")
+                if attempt_counter == 0: print ("\nЭто слово:", word)   
         else:
-            clear()
-            print("".join(guess))
-            attempt_counter-=1
-            print ("Не угадал")
-            if attempt_counter < 5: print ("  | ")
-            if attempt_counter < 4: print ("  O ")
-            if attempt_counter < 3: print (" /|\ ")
-            if attempt_counter < 2: print ("  | ")
-            if attempt_counter < 1: print (" / \ ")
-            if attempt_counter == 0: print ("\nЭто слово:", word)   
+            print("Некорректный ввод")
         if attempt_counter == 0:
             print("К сожалению, тебя повесили.")
             break
-    if guess==word_arr:
-        print("Поздравляю, ты победил!")
-choice = "да"
-while True:
-    choice = input("Хотите ли вы начать игру? да/нет:").lower()
-    if choice!="да" and choice!="нет":
-        print("Ты сказал что-то не то.")
-    elif choice=="нет":
-        clear()
-        break
     else:
-        gallows_start()
+        print("Поздравляю, ты победил!")  
+        if play_again():
+            gallows_loop()
+        else:
+            clear()
+            exit()   
+
+if __name__ == '__main__':
+    gallows_loop()
