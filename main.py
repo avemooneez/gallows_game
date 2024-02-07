@@ -52,12 +52,16 @@ def gallows_loop():
                 if attempt_counter < 3: print (" /|\ ")
                 if attempt_counter < 2: print ("  | ")
                 if attempt_counter < 1: print (" / \ ")
-                if attempt_counter == 0: print ("\nЭто слово:", word)   
+                if attempt_counter == 0:
+                    print("К сожалению, тебя повесили.")
+                    if play_again():
+                        gallows_loop()
+                    else:
+                        clear()
+                        exit()
         else:
             print("Некорректный ввод")
-        if attempt_counter == 0:
-            print("К сожалению, тебя повесили.")
-            break
+            
     else:
         print("Поздравляю, ты победил!")  
         if play_again():
