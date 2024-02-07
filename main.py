@@ -60,6 +60,7 @@ def gallows_loop():
                         if attempt_counter < 2: print ("  | ")
                         if attempt_counter < 1: print (" / \ ")
                         if attempt_counter == 0:
+                            print("Это слово - ", word)
                             print("К сожалению, тебя повесили.")
                             gallows_loop()
                 else:
